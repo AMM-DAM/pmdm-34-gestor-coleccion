@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.pmdmiesbalmis.components.ui.composables.CheckboxWithLabel
 import com.pmdm.login.ui.components.ForumTextField
 import com.pmdm.login.ui.components.PasswordTextField
@@ -105,42 +106,12 @@ fun LoginScreen(
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    val validadorLogin = remember { ValidadorLogin() }
-    var loginUiState by remember { mutableStateOf(LoginUiState()) }
-    val onLoginEvent: (LoginEvent) -> Unit = { event ->
-        when (event) {
-            is LoginEvent.OnEmailChanged -> {
-                val validacionCorreo =
-                    validadorLogin.validadorCorreo.valida(event.email)
-                loginUiState = loginUiState.copy(
-                    email = event.email,
-                    validacion = loginUiState.validacion.copy(validacionCorreo = validacionCorreo)
-                )
-            }
-            is LoginEvent.OnPasswordChanged -> {
-                val validacionContrasena =
-                    validadorLogin.validadorContrasena.valida(event.password)
-                loginUiState = loginUiState.copy(
-                    password = event.password,
-                    validacion = loginUiState.validacion.copy(validacionContrasena = validacionContrasena)
-                )
-            }
-            LoginEvent.OnRecordarSesionChanged -> {
-                loginUiState = loginUiState.copy(recordarSesion = !loginUiState.recordarSesion)
-            }
-            LoginEvent.OnLogin -> {
-                loginUiState = loginUiState.copy(
-                    validacion = validadorLogin.valida(loginUiState)
-                )
-            }
-            LoginEvent.OnNavigateToSignup -> {}
-        }
-    }
+    val loginViewModel: LoginViewModel = viewModel()
 
     LoginTheme {
         LoginScreen(
-            loginUiState,
-            onLoginEvent = onLoginEvent
+            loginUiState = loginViewModel.loginUiState,
+            onLoginEvent = loginViewModel::onLoginEvent
         )
     }
 }
