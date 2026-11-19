@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -64,6 +65,10 @@ fun LoginForm(
                 checkedState = uiState.recordarSesion,
                 onStateChange = { onLoginEvent(LoginEvent.OnRecordarSesionChanged) },
             )
+            Spacer(Modifier.height(16.dp))
+            if (uiState.error != null) {
+                Text(uiState.error, color = MaterialTheme.colorScheme.error)
+            }
             Spacer(Modifier.height(16.dp))
             Button(onClick = { onLoginEvent(LoginEvent.OnLogin) }, modifierFillMaxWidth) {
                 Text("Iniciar sesión")

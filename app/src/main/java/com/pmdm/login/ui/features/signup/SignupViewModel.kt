@@ -68,6 +68,9 @@ class SignupViewModel: ViewModel() {
                     )
 
                 } else {
+                    signupUiState = signupUiState.copy(
+                        error = null
+                    )
                     userRepository.insert(signupUiState.toUser())
                 }
             }

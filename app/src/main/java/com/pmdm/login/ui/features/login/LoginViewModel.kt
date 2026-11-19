@@ -42,11 +42,14 @@ class LoginViewModel: ViewModel() {
                     loginUiState = loginUiState.copy(
                         error = "Hay errores en el formulario"
                     )
-                } else if(foundUser == null) {
+                } else if(foundUser == null || foundUser.password != loginUiState.password) {
                     loginUiState = loginUiState.copy(
-                        error = "No existe un usuario con ese correo"
+                        error = "No existe el usuario o la contraseña no es correcta"
                     )
                 } else {
+                    loginUiState = loginUiState.copy(
+                        error = null
+                    )
                     // Iniciar sesión...
                 }
             }
