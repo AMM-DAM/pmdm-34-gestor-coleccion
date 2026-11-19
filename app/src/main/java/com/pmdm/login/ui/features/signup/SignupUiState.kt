@@ -9,7 +9,7 @@ data class SignupUiState(
     val passwordRepeat: String = "",
     val acceptToC: Boolean = false,
     val validacion: ValidacionSignupUiState = ValidacionSignupUiState(),
-    var error: String? = null
+    val error: String? = null
 )
 
 fun SignupUiState.toUser() = User(

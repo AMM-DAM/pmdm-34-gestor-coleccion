@@ -56,12 +56,16 @@ class SignupViewModel: ViewModel() {
                 signupUiState = signupUiState.copy(validacion = validacion)
 
                 if (validacion.hayError) {
-                    signupUiState.error = "Hay errores en el formulario"
+                    signupUiState = signupUiState.copy(
+                        error = "Hay errores en el formulario"
+                    )
 
                 // NOTA: El repository no tiene ninguna validacion.
                 //  por eso validamos aqui, para mostrar un error
                 } else if (userRepository.getByEmail(signupUiState.email) != null) {
-                    signupUiState.error = "Ya existe un usuario con ese correo electrónico"
+                    signupUiState = signupUiState.copy(
+                        error = "Ya existe un usuario con ese correo electrónico"
+                    )
 
                 } else {
                     userRepository.insert(signupUiState.toUser())
