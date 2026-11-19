@@ -13,6 +13,8 @@ import com.pmdm.login.data.PiezaRepository
 import com.pmdm.login.ui.features.login.LoginScreen
 import com.pmdm.login.ui.features.login.LoginViewModel
 import com.pmdm.login.ui.features.presentacion.PresentacionScreen
+import com.pmdm.login.ui.features.signup.SignupScreen
+import com.pmdm.login.ui.features.signup.SignupViewModel
 import com.pmdm.login.ui.theme.LoginTheme
 
 enum class Pantalla {
@@ -24,10 +26,11 @@ enum class Pantalla {
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val loginViewModel: LoginViewModel by viewModels();
+        val loginViewModel: LoginViewModel by viewModels()
+        val signupViewModel: SignupViewModel by viewModels()
         setContent {
             LoginTheme {
-                GestorColeccionesApp(loginViewModel)
+                GestorColeccionesApp(loginViewModel, signupViewModel)
             }
         }
     }
@@ -35,7 +38,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun GestorColeccionesApp(
-    loginViewModel: LoginViewModel
+    loginViewModel: LoginViewModel,
+    signupViewModel: SignupViewModel
 ) {
     var pantallaActual by remember { mutableStateOf(Pantalla.PRESENTACION) }
     val piezaMostrar by remember {
@@ -56,58 +60,11 @@ fun GestorColeccionesApp(
                 onLoginEvent = loginViewModel::onLoginEvent
             )
         }
-        Pantalla.SIGNUP -> {}
-//        Pantalla.SIGNUP -> {
-//            SignupScreen(
-//                uiState = signupUiState,
-//                onSignupEvent = { event ->
-//                    when (event) {
-//                        is SignupEvent.OnEmailChanged -> {
-//                            val validacion = validadorSignup.validadorEmail.valida(event.email)
-//                            signupUiState = signupUiState.copy(
-//                                email = event.email,
-//                                validacion = signupUiState.validacion.copy(validacionEmail = validacion)
-//                            )
-//                        }
-//                        is SignupEvent.OnUsernameChanged -> {
-//                            val validacion = validadorSignup.validadorUsername.valida(event.username)
-//                            signupUiState = signupUiState.copy(
-//                                username = event.username,
-//                                validacion = signupUiState.validacion.copy(validacionUsername = validacion)
-//                            )
-//                        }
-//                        is SignupEvent.OnPasswordChanged -> {
-//                            val validacion = validadorSignup.validadorPassword.valida(event.password)
-//                            signupUiState = signupUiState.copy(
-//                                password = event.password,
-//                                validacion = signupUiState.validacion.copy(validacionPassword = validacion)
-//                            )
-//                        }
-//                        is SignupEvent.OnPasswordRepeatChanged -> {
-//                            val validacion = validadorSignup.validadorPasswordRepeat.valida(
-//                                event.passwordRepeat,
-//                                signupUiState.password
-//                            )
-//                            signupUiState = signupUiState.copy(
-//                                passwordRepeat = event.passwordRepeat,
-//                                validacion = signupUiState.validacion.copy(validacionPasswordRepeat = validacion)
-//                            )
-//                        }
-//                        SignupEvent.OnAcceptToCChanged -> {
-//                            signupUiState = signupUiState.copy(
-//                                acceptToC = !signupUiState.acceptToC
-//                            )
-//                        }
-//                        SignupEvent.OnSignup -> {
-//                            val validacion = validadorSignup.valida(signupUiState)
-//                            signupUiState = signupUiState.copy(validacion = validacion)
-//                        }
-//                        SignupEvent.OnNavigateToLogin -> {
-//                            pantallaActual = Pantalla.LOGIN
-//                        }
-//                    }
-//                }
-//            )
-//        }
+        Pantalla.SIGNUP -> {
+            SignupScreen(
+                uiState = signupViewModel.signupUiState,
+                onSignupEvent = signupViewModel::onSignupEvent
+            )
+        }
     }
 }
