@@ -2,10 +2,8 @@ package com.pmdm.login.ui.features.login
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.pmdm.login.Pantalla
 
 class LoginViewModel: ViewModel() {
     val validadorLogin = ValidadorLogin()
