@@ -4,8 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.pmdm.login.data.UserRepository
 
 class LoginViewModel: ViewModel() {
+    val userRepository = UserRepository()
     val validadorLogin = ValidadorLogin()
     var loginUiState by mutableStateOf(LoginUiState())
 
@@ -29,9 +31,24 @@ class LoginViewModel: ViewModel() {
                 loginUiState = loginUiState.copy(recordarSesion = !loginUiState.recordarSesion)
             }
             LoginEvent.OnLogin -> {
+                val validacion = validadorLogin.valida(loginUiState)
+                val foundUser = userRepository.getByEmail(loginUiState.email)
+
                 loginUiState = loginUiState.copy(
-                    validacion = validadorLogin.valida(loginUiState)
+                    validacion = validacion
                 )
+
+                if (validacion.hayError) {
+                    loginUiState = loginUiState.copy(
+                        error = "Hay errores en el formulario"
+                    )
+                } else if(foundUser == null) {
+                    loginUiState = loginUiState.copy(
+                        error = "No existe un usuario con ese correo"
+                    )
+                } else {
+                    // Iniciar sesión...
+                }
             }
             LoginEvent.OnNavigateToSignup -> {
                 // pantallaActual = Pantalla.SIGNUP
