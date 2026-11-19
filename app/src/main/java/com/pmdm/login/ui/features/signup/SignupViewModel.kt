@@ -4,8 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.pmdm.login.data.UserRepository
 
 class SignupViewModel: ViewModel() {
+    val userRepository = UserRepository()
 
     val validadorSignup = ValidadorSignup()
 
@@ -52,6 +54,18 @@ class SignupViewModel: ViewModel() {
             SignupEvent.OnSignup -> {
                 val validacion = validadorSignup.valida(signupUiState)
                 signupUiState = signupUiState.copy(validacion = validacion)
+
+                if (validacion.hayError) {
+                    signupUiState.error = "Hay errores en el formulario"
+
+                // NOTA: El repository no tiene ninguna validacion.
+                //  por eso validamos aqui, para mostrar un error
+                } else if (userRepository.getByEmail(signupUiState.email) != null) {
+                    signupUiState.error = "Ya existe un usuario con ese correo electrónico"
+
+                } else {
+                    userRepository.insert(signupUiState.toUser())
+                }
             }
             SignupEvent.OnNavigateToLogin -> {
                 // pantallaActual = Pantalla.LOGIN
